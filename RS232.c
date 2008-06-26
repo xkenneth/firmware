@@ -4,6 +4,7 @@
 //
 // Rev 01	02/02/06	Loop RS232Serv till Rx buffer is empty to improve comm
 // Rev 02	02/19/07	RS232Serv totally revised, motor, pulse, sensor functions are working
+//comment1
 #include "RS232.h"
 #include "swuart.h"
 #include "peterc.h"
