@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<visualdsp-project schema="16" name="pulse_chirp" file="C:\Teledrill\Firmware\trunk\pulsechirp.dpj" generated="Thu Apr 17 16:12:22 2008" expanded="yes">
+	<!-- Project build target -->
+	<target>
+		<processor>ADSP-2187</processor>
+		<extension>.bnm</extension>
+		<type>Splitter file</type>
+	</target>
+	<!-- Configurations -->
+	<configurations active="Debug">
+		<configuration name="Debug">
+			<intermediate-dir>.\debug</intermediate-dir>
+			<output-dir>.\debug</output-dir>
+			<tools>
+				<tool type="VCSE">
+					<option><![CDATA[|-Version>3.5|-save-temps>1|NOSWITCH>1]]></option>
+				</tool>
+				<tool type="Compiler">
+					<option><![CDATA[|-Version>3.5|AdditionalOptions>-save-temps|-O1>1|-Ov>22|-g>1|-D>__GNUC__=1|-I>"C:\Program Files\Analog Devices\VisualDSP 3.5 16-Bit\218x\include";"C:\Program Files\Analog Devices\VisualDSP 3.5 16-Bit\218x\lib"]]></option>
+				</tool>
+				<tool type="Assembler">
+					<option><![CDATA[|-Version>3.5|-g>1|-l>1]]></option>
+				</tool>
+				<tool type="Linker">
+					<option><![CDATA[|-Version>3.5|NOSWITCH>1|-map>1|-flags-link -xref>1|-L> ]]></option>
+				</tool>
+				<tool type="Archiver">
+					<option><![CDATA[]]></option>
+				</tool>
+				<tool type="Splitter">
+					<option><![CDATA[|-Version>3.5|-i>1|-pm>1]]></option>
+				</tool>
+			</tools>
+		</configuration>
+		<configuration name="Release">
+			<intermediate-dir>.\release</intermediate-dir>
+			<output-dir>.\release</output-dir>
+			<tools>
+				<tool type="VCSE">
+					<option><![CDATA[|-Version>3.5|NOSWITCH>1]]></option>
+				</tool>
+				<tool type="Compiler">
+					<option><![CDATA[|-Version>3.5|-O1>0|-Ov>100|-g>0]]></option>
+				</tool>
+				<tool type="Assembler">
+					<option><![CDATA[|-Version>3.5|-g>0]]></option>
+				</tool>
+				<tool type="Linker">
+					<option><![CDATA[|-Version>3.5|NOSWITCH>1]]></option>
+				</tool>
+				<tool type="Archiver">
+					<option><![CDATA[]]></option>
+				</tool>
+				<tool type="Splitter">
+					<option><![CDATA[|-Version>3.5|-i>1|-pm>1]]></option>
+				</tool>
+			</tools>
+		</configuration>
+	</configurations>
+	<!-- Project folders -->
+	<folders>
+		<folder name="Header Files" ext=".h;.asm" expanded="yes">
+			<files>
+				<file name=".\Backgrd.h">
+				</file>
+				<file name=".\BoardCheckout1.h">
+				</file>
+				<file name=".\dataout.h">
+				</file>
+				<file name=".\FLASH.H">
+				</file>
+				<file name="$(ADI_DSP)\218x\lib\src\libc_src\math_const.h">
+				</file>
+				<file name=".\Peterc.h">
+				</file>
+				<file name=".\RS232.h">
+				</file>
+				<file name=".\Stddef.h">
+				</file>
+				<file name=".\swuart.h">
+				</file>
+				<file name=".\Sysdef.h">
+				</file>
+				<file name=".\Timer.h">
+				</file>
+			</files>
+		</folder>
+		<folder name="Linker Files" ext=".ldf" expanded="yes">
+			<files>
+				<file name=".\ADSP-2187.ldf">
+					<file-configurations>
+						<file-configuration name="Debug">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Debug</intermediate-dir>
+							<output-dir>.\debug</output-dir>
+						</file-configuration>
+						<file-configuration name="Release">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Release</intermediate-dir>
+							<output-dir>.\Release</output-dir>
+						</file-configuration>
+					</file-configurations>
+				</file>
+			</files>
+		</folder>
+		<folder name="Source Files" ext=".c;.asm" expanded="yes">
+			<files>
+				<file name=".\Backgrd.c">
+					<file-configurations>
+						<file-configuration name="Debug">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\debug</intermediate-dir>
+							<output-dir>.\debug</output-dir>
+						</file-configuration>
+						<file-configuration name="Release">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\release</intermediate-dir>
+							<output-dir>.\release</output-dir>
+						</file-configuration>
+					</file-configurations>
+				</file>
+				<file name=".\BoardCheckout1.asm">
+					<file-configurations>
+						<file-configuration name="Debug">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Debug</intermediate-dir>
+							<output-dir>.\Debug</output-dir>
+						</file-configuration>
+						<file-configuration name="Release">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Release</intermediate-dir>
+							<output-dir>.\Release</output-dir>
+						</file-configuration>
+					</file-configurations>
+				</file>
+				<file name=".\dataout.c">
+					<file-configurations>
+						<file-configuration name="Debug">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Debug</intermediate-dir>
+							<output-dir>.\debug</output-dir>
+						</file-configuration>
+						<file-configuration name="Release">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Release</intermediate-dir>
+							<output-dir>.\Release</output-dir>
+						</file-configuration>
+					</file-configurations>
+				</file>
+				<file name=".\FLASH.asm">
+					<file-configurations>
+						<file-configuration name="Debug">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Debug</intermediate-dir>
+							<output-dir>.\debug</output-dir>
+						</file-configuration>
+						<file-configuration name="Release">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Release</intermediate-dir>
+							<output-dir>.\Release</output-dir>
+						</file-configuration>
+					</file-configurations>
+				</file>
+				<file name=".\Peterc.c">
+					<file-configurations>
+						<file-configuration name="Debug">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Debug</intermediate-dir>
+							<output-dir>.\debug</output-dir>
+						</file-configuration>
+						<file-configuration name="Release">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Release</intermediate-dir>
+							<output-dir>.\Release</output-dir>
+						</file-configuration>
+					</file-configurations>
+				</file>
+				<file name=".\RS232.c">
+					<file-configurations>
+						<file-configuration name="Debug">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Debug</intermediate-dir>
+							<output-dir>.\debug</output-dir>
+						</file-configuration>
+						<file-configuration name="Release">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Release</intermediate-dir>
+							<output-dir>.\Release</output-dir>
+						</file-configuration>
+					</file-configurations>
+				</file>
+				<file name=".\STDDEF.ASM">
+					<file-configurations>
+						<file-configuration name="Debug">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Debug</intermediate-dir>
+							<output-dir>.\Debug</output-dir>
+						</file-configuration>
+						<file-configuration name="Release">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Release</intermediate-dir>
+							<output-dir>.\Release</output-dir>
+						</file-configuration>
+					</file-configurations>
+				</file>
+				<file name=".\swuart.c">
+					<file-configurations>
+						<file-configuration name="Debug">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Debug</intermediate-dir>
+							<output-dir>.\debug</output-dir>
+						</file-configuration>
+						<file-configuration name="Release">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\Release</intermediate-dir>
+							<output-dir>.\Release</output-dir>
+						</file-configuration>
+					</file-configurations>
+				</file>
+				<file name=".\Timer.c">
+					<file-configurations>
+						<file-configuration name="Debug">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\debug</intermediate-dir>
+							<output-dir>.\debug</output-dir>
+						</file-configuration>
+						<file-configuration name="Release">
+							<excluded-flag value="no"/>
+							<build-with-flag value="project"/>
+							<intermediate-dir>.\release</intermediate-dir>
+							<output-dir>.\release</output-dir>
+						</file-configuration>
+					</file-configurations>
+				</file>
+			</files>
+		</folder>
+	</folders>
+</visualdsp-project>

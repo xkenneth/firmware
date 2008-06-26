@@ -1,0 +1,254 @@
+// $Revision: 1.1.4.1 $
+
+ARCHITECTURE(ADSP-2187)
+
+SEARCH_DIR( $ADI_DSP\218x\lib )
+
+// Use of the "-reserve" switch with I2, I3, I5, I7 or M0 causes cc218x
+// to define macro __RESERVE_AUTOBUFFER_REGS__ at compile, assemble,
+// and link phases to use specially adapted library functions
+// built with all these registers reserved.
+#ifdef __RESERVE_AUTOBUFFER_REGS__
+$CLIBS     = libioab.dlb , libcab.dlb, libc.dlb, libetsi.dlb;
+#else  // ! __RESERVE_AUTOBUFFER_REGS__
+$CLIBS     = libio.dlb , libc.dlb, libetsi.dlb;
+#endif // __RESERVE_AUTOBUFFER_REGS__
+
+// Libraries from the command line are included in COMMAND_LINE_OBJECTS.
+$OBJECTS = 218x_int_tab.doj , 218x_hdr.doj , $COMMAND_LINE_OBJECTS;
+$LIBRARIES = $CLIBS;
+
+// do not allow linkers -e(elimination) various symbols
+//  _main - C/C++ application main() function
+//  ___reserved_bitmask - compiler defined bitmask depicting reserved registers
+KEEP(_main,___reserved_bitmask)
+
+// 2187 has 32K words 24-bit Program RAM internal and 32K words of 
+// 16-bit Data RAM internal.
+
+// Compiler defaults:
+// The default program memory used by the compiler will be in
+// a section called program, and gets placed in a memory segment
+// being defined below as mem_code.
+//
+// The default DM data memory used by the compiler will be in
+// a section called data1, and gets placed in a memory segment
+// being defined below as mem_data1.
+//
+// The default PM data memory used by the compiler will be in
+// a section called data2, and gets placed in a memory segment
+// being defined below as mem_data2.
+//
+// The memory segment used for dynamic memory used by allocation
+// routines such as malloc will is called mem_heap.
+//
+// The memory segment used for the software stack pointed to by
+// STACKPOINTER(I4) and FRAMEPOINTER(I5) is called mem_stack.
+
+// The default LDF files will not define or use overlays.
+// Some commented out example code can be found below that demonstrates
+// how overlay builds might be implemented.
+
+MEMORY
+{
+
+       // The memory section where the reset vector resides
+    mem_INT_RSTI     { TYPE(PM RAM) START(0x000000) END(0x000003) WIDTH(24) }
+
+       // The memory sections where the interrupt vector code
+       // resides.
+    mem_INT_IRQ2     { TYPE(PM RAM) START(0x000004) END(0x000007) WIDTH(24) }
+    mem_INT_IRQL1    { TYPE(PM RAM) START(0x000008) END(0x00000B) WIDTH(24) }
+    mem_INT_IRQL0    { TYPE(PM RAM) START(0x00000c) END(0x00000F) WIDTH(24) }
+    mem_INT_SPORT0X  { TYPE(PM RAM) START(0x000010) END(0x000013) WIDTH(24) }
+    mem_INT_SPORT0R  { TYPE(PM RAM) START(0x000014) END(0x000017) WIDTH(24) }
+    mem_INT_IRQE     { TYPE(PM RAM) START(0x000018) END(0x00001B) WIDTH(24) }
+    mem_INT_BDMA     { TYPE(PM RAM) START(0x00001C) END(0x00001F) WIDTH(24) }
+    mem_INT_IRQ1     { TYPE(PM RAM) START(0x000020) END(0x000023) WIDTH(24) }
+    mem_INT_IRQ0     { TYPE(PM RAM) START(0x000024) END(0x000027) WIDTH(24) }
+    mem_INT_TIMER    { TYPE(PM RAM) START(0x000028) END(0x00002B) WIDTH(24) }
+    mem_INT_PWRDWN   { TYPE(PM RAM) START(0x00002C) END(0x00002F) WIDTH(24) }
+
+    mem_code         { TYPE(PM RAM) START(0x000030) END(0x0037ba) WIDTH(24) }
+    mem_data2        { TYPE(PM RAM) START(0x0037bb) END(0x003fff) WIDTH(24) }
+
+    mem_data1        { TYPE(DM RAM) START(0x000000) END(0x002fff) WIDTH(16) }
+    mem_heap         { TYPE(DM RAM) START(0x003000) END(0x0037ff) WIDTH(16) }
+    mem_stack        { TYPE(DM RAM) START(0x003800) END(0x003fdf) WIDTH(16) }
+
+/*
+   mem_code          { TYPE(PM RAM) START(0x000030) END(0x001fff) WIDTH(24) }
+   mem_pmovly        { TYPE(PM RAM) START(0x002000) END(0x003fff) WIDTH(24) }
+                                             //"run" space for PMOVLAY pages
+     //   PMOVLAY Pages:  some apps will define mem_pmpage1 and 
+     //                   mem_pmpage2 for the external PMOVLAY pages
+   mem_pmpage0       { TYPE(PM RAM) START(0x002000) END(0x003fff) WIDTH(24) }
+   mem_pmpage4       { TYPE(PM RAM) START(0x042000) END(0x043fff) WIDTH(24) }
+   mem_pmpage5       { TYPE(PM RAM) START(0x052000) END(0x053fff) WIDTH(24) }
+
+   mem_data1         { TYPE(DM RAM) START(0x002000) END(0x002fff) WIDTH(16) }
+   mem_dmovly        { TYPE(DM RAM) START(0x000000) END(0x001fff) WIDTH(16) }
+                                             //"run" space for DMOVLAY pages
+     // DMOVLAY Pages:
+   mem_dmpage0       { TYPE(DM RAM) START(0x000000) END(0x001fff) WIDTH(16) }
+   mem_dmpage4       { TYPE(DM RAM) START(0x040000) END(0x041fff) WIDTH(16) }
+   mem_dmpage5       { TYPE(DM RAM) START(0x050000) END(0x051fff) WIDTH(16) }
+*/
+
+}  // end of memory map
+
+/* 
+// Procedure Linkage Table (PLIT) template. The PLIT is a jump table
+// constructed by Linker in root memory.  Each call to an overlay
+// section is replaced with a call to the PLIT.  This template tells
+// link what instructions to put into each PLIT entry. Keyword PLIT
+// must be all capitals, as the linker is case sensitive.
+PLIT
+{
+    PMOVLAY = PLIT_SYMBOL_OVERLAYID;
+    JUMP PLIT_SYMBOL_ADDRESS;
+}
+*/
+
+PROCESSOR p0
+{
+    LINK_AGAINST( $COMMAND_LINE_LINK_AGAINST)
+    OUTPUT( $COMMAND_LINE_OUTPUT_FILE )
+
+    SECTIONS
+    {
+        sec_INT_RSTI {
+           INPUT_SECTIONS ( $OBJECTS( IVreset ) )
+        } > mem_INT_RSTI
+   
+        sec_INT_IRQ2 {
+           INPUT_SECTIONS ( $OBJECTS( IVirq2 ) )
+        } > mem_INT_IRQ2
+   
+        sec_INT_IRQL1 {
+           INPUT_SECTIONS ( $OBJECTS( IVirql1 ) )
+        } > mem_INT_IRQL1
+   
+        sec_INT_IRQL0 {
+           INPUT_SECTIONS ( $OBJECTS( IVirql0 ) )
+        } > mem_INT_IRQL0
+   
+        sec_INT_SPORT0X {
+           INPUT_SECTIONS ( $OBJECTS( IVsport0xmit ) )
+        } > mem_INT_SPORT0X
+   
+        sec_INT_SPORT0R {
+           INPUT_SECTIONS ( $OBJECTS( IVsport0recv ) )
+        } > mem_INT_SPORT0R
+   
+        sec_INT_IRQE {
+           INPUT_SECTIONS ( $OBJECTS( IVirqe ) )
+        } > mem_INT_IRQE
+   
+        sec_INT_BDMA {
+           INPUT_SECTIONS ( $OBJECTS( IVbdma ) )
+        } > mem_INT_BDMA
+   
+        sec_INT_IRQ1 {
+           INPUT_SECTIONS ( $OBJECTS( IVirq1 ) )
+        } > mem_INT_IRQ1
+   
+        sec_INT_IRQ0 {
+           INPUT_SECTIONS ( $OBJECTS( IVirq0 ) )
+        } > mem_INT_IRQ0
+   
+        sec_INT_TIMER {
+           INPUT_SECTIONS ( $OBJECTS( IVtimer ) )
+        } > mem_INT_TIMER
+   
+        sec_INT_PWRDWN {
+           INPUT_SECTIONS ( $OBJECTS( IVpwrdwn ) )
+        } > mem_INT_PWRDWN
+
+        sec_code
+        {
+            INPUT_SECTIONS( $OBJECTS(program) $LIBRARIES(program) )
+        } > mem_code
+
+        sec_data1
+        {
+            INPUT_SECTIONS( $OBJECTS(data1) $LIBRARIES(data1) )
+        } > mem_data1
+
+        sec_data2
+        {
+            INPUT_SECTIONS( $OBJECTS(data2) $LIBRARIES(data2) )
+        } > mem_data2
+
+        // provide linker variables describing the stack (grows down)
+        //   ldf_stack_limit is the lowest address in the stack
+        //   ldf_stack_base is the highest address in the stack 
+        sec_stack
+        {
+            ldf_stack_limit = .;
+            ldf_stack_base  = . + MEMORY_SIZEOF(mem_stack) - 1;
+        } > mem_stack
+        
+        sec_heap
+        {
+            .heap      = .;
+            .heap_size = MEMORY_SIZEOF(mem_heap);
+            .heap_end  = . + MEMORY_SIZEOF(mem_heap) - 1;
+        } > mem_heap
+
+/*
+        // pages not populated by default
+        // example ldf code to build PMOVLAY pages
+        sec_pmpage
+        {
+            PAGE_INPUT
+            {
+                ALGORITHM(ALL_FIT)
+                PAGE_OUTPUT(pmpage0.ovl)
+                INPUT_SECTIONS( $OBJECTS(data2) )
+            } > mem_pmpage0
+
+            PAGE_INPUT
+            {
+                ALGORITHM(ALL_FIT)
+                PAGE_OUTPUT(pmpage4.ovl)
+                INPUT_SECTIONS( $PMPAGE_OBJ_4(program) )
+            } > mem_pmpage4
+
+            PAGE_INPUT
+            {
+                ALGORITHM(ALL_FIT)
+                PAGE_OUTPUT(pmpage5.ovl)
+                INPUT_SECTIONS( $PMPAGE_OBJ_5(program) )
+            } > mem_pmpage5
+        } > mem_pmovly
+
+        // example ldf code to build DMOVLAY pages
+        sec_dmpage
+        {
+            PAGE_INPUT
+            {
+                ALGORITHM(ALL_FIT)
+                PAGE_OUTPUT(dmpage0.ovl)
+                INPUT_SECTIONS( $OBJECTS(data1) )
+            } > mem_dmpage0
+
+            PAGE_INPUT
+            {
+                ALGORITHM(ALL_FIT)
+                PAGE_OUTPUT(dmpage4.ovl)
+                INPUT_SECTIONS( $DMPAGE_OBJ_4(data1) )
+            } > mem_dmpage4
+
+            PAGE_INPUT
+            {
+                ALGORITHM(ALL_FIT)
+                PAGE_OUTPUT(dmpage5.ovl)
+                INPUT_SECTIONS( $DMPAGE_OBJ_5(data1) )
+            } > mem_dmpage5
+        } > mem_dmovly
+
+        .plit { } > mem_code // place in non-overlay
+*/
+    } // SECTIONS
+} // PROCESSOR p0
